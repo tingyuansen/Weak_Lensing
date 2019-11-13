@@ -15,7 +15,7 @@ L_choice = 4
 max_order_choice = 1
 scattering = HarmonicScattering3D(J=J_choice, shape=(64,64,64),\
                           L=L_choice, max_order=max_order_choice)
-#scattering.cuda()
+scattering.cuda()
 
 import torch
 x_image = torch.from_numpy(sim_z0).type(torch.cuda.FloatTensor)
