@@ -19,7 +19,7 @@ scattering.cuda()
 
 import torch
 x_image = torch.from_numpy(sim_z0).type(torch.cuda.FloatTensor)
-scatter_coeff = scattering(x_image).view(1,-1).cpu().detach().numpy()
+scatter_coeff = scattering(x_image).view(x_image.shape[0],-1).cpu().detach().numpy()
 print(scatter_coeff.shape)
 
 # save results
