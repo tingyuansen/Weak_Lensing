@@ -23,7 +23,7 @@ num_pixel = 64
 # define scattering
 J_choice = 6
 L_choice = 5
-max_order_choice = 2
+max_order_choice = 1
 scattering = HarmonicScattering3D(J=J_choice, shape=(64,64,64),\
                           L=L_choice, max_order=max_order_choice)
 scattering.cuda()

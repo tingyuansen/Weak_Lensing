@@ -12,7 +12,7 @@ from kymatio import HarmonicScattering3D
 # make scattering coefficients
 J_choice = 6
 L_choice = 5
-max_order_choice = 2
+max_order_choice = 1
 scattering = HarmonicScattering3D(J=J_choice, shape=(64,64,64),\
                           L=L_choice, max_order=max_order_choice)
 scattering.cuda()
@@ -23,4 +23,4 @@ scatter_coeff = scattering(x_image).view(x_image.shape[0],-1).cpu().detach().num
 print(scatter_coeff.shape)
 
 # save results
-np.save("../scatter_coeff_3D_max_order=" + str(max_order_choice) + ".npy", scatter_coeff)
+np.save("scatter_coeff_3D_max_order=" + str(max_order_choice) + ".npy", scatter_coeff)
