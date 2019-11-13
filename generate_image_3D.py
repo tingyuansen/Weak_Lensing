@@ -30,51 +30,35 @@ scattering.cuda()
 
 
 #=========================================================================================================
+# restore scattering coefficient
+target_coeff = np.load("../scatter_coeff_3D_max_order=2.npy")[0,:]
+
+# restore data
+temp = np.load('../Zeldovich_Approximation.npz')
+sim_z0 = temp["sim_z0"]
+sim_z50 = temp["sim_z50"]
+
+#=========================================================================================================
 # main body of the script
-def generate_image(ind):
+def main():
 
-    # target ccoefficients
-    image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor) + 5.
-    scattering_target = HarmonicScattering3D(J=J_choice, shape=(64,64,64),\
-                              L=L_choice, max_order=max_order_choice)
-    scattering_target.cuda()
-    target_coeff = scattering_target(image_initial).view(x_image.shape[0],-1).log();
-
-    # restore pre-calculated coefficients
-    target_coeff = torch.from_numpy(np.load("scatter_coeff_max_order=2.npy")[ind,:]).type(torch.cuda.FloatTensor)
-    CDF_t = torch.from_numpy(np.load("cdf_array.npy")[6,:]).type(torch.cuda.FloatTensor)
-
-#----------------------------------------------------------------------------------------------------------
-    # restore previous results
-    if ind != 0:
-        #pre_result = np.load("max_order=1.npy")
-        pre_result = np.load("../max_order=2_ind=" + str(ind-1) + ".npy");
-
-#----------------------------------------------------------------------------------------------------------
     # define mock image
     class model_image(nn.Module):
         def __init__(self):
             super(model_image, self).__init__()
 
+            # start with a random image
+            self.param = torch.nn.Parameter(
+                            torch.from_numpy(sim_z50[0:1,:,:,:]).type(torch.cuda.FloatTensor)
+                        )
+
+            # random image
             # star with the same image but with random phase
             #self.param = torch.nn.Parameter(
             #    torch.from_numpy(
             #        get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1)
             #    ).type(torch.cuda.FloatTensor) + 5.
             #)
-
-            if ind == 0:
-                self.param = torch.nn.Parameter(
-                    torch.from_numpy(get_random_data(np.concatenate((
-                           np.concatenate((image_tiling[0],image_tiling[1]),0),
-                           np.concatenate((image_tiling[2],image_tiling[3]),0)),1), num_pixel, num_pixel).reshape(1,-1)
-                           ).type(torch.cuda.FloatTensor) + 5.
-                    )
-            else:
-                # use previous results
-                self.param = torch.nn.Parameter(
-                            torch.from_numpy(pre_result).type(torch.cuda.FloatTensor)
-                            )
 
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
@@ -93,32 +77,21 @@ def generate_image(ind):
 
         # optimize
         for i in range(int(num_step)):
-            scattering_coeff = scattering(model_fit.param.reshape(1,num_pixel,num_pixel))\
-                                    .mean(dim=(2,3))[0,:].log();
-            loss_1 = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
-            loss_2 = ((torch.sort(model_fit.param).values[0,::4] - CDF_t)**2).sum()/5.
-            print(loss_1/loss_2) # making sure the two losses are of the same order
-            loss = loss_1 + loss_2
+            scattering_coeff = scattering(model_fit.param).view(-1).log();
+            loss = ((target_coeff-scattering_coeff)**2).sum();
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
                 # save map
-                #np.save("../results_step=" + str(i) + ".npy", model_fit.param.cpu().detach().numpy());
+                np.save("../results_step=" + str(i) + ".npy", model_fit.param.cpu().detach().numpy());
                 #np.save("../scatter_coeff_step=" + str(i) + ".npy", scattering_coeff.cpu().detach().numpy());
                 print(i, loss)
-                print((target_coeff[1:]-scattering_coeff[1:]).abs()/target_coeff[1:].abs())
+                print((target_coeff-scattering_coeff).abs()/target_coeff.abs())
 
             optimizer.zero_grad();
             loss.backward();
             optimizer.step();
 
-        np.save("../max_order=2_ind=" + str(ind) + ".npy", model_fit.param.cpu().detach().numpy());
-        np.save("../max_order=2_scatter_coeff_ind=" + str(ind) + ".npy", scattering_coeff.cpu().detach().numpy());
-
 #---------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    #main()
-
-    # loop over all index
-    for i in range(12):
-        generate_image(i)
+    main()
