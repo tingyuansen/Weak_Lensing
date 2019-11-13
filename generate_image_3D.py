@@ -32,7 +32,7 @@ scattering.cuda()
 #=========================================================================================================
 # restore scattering coefficient
 target_coeff = np.load("scatter_coeff_3D_max_order=1.npy")[0,:]
-target_coeff = torch.from_numpy(target_coeff).type(torch.cuda.FloatTensor)
+target_coeff = torch.from_numpy(np.log(target_coeff)).type(torch.cuda.FloatTensor)
 
 # restore data
 temp = np.load('../Zeldovich_Approximation.npz')
