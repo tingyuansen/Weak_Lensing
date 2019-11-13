@@ -10,7 +10,7 @@ sim_z50 = temp["sim_z50"]
 from kymatio import HarmonicScattering3D
 
 # make scattering coefficients
-J_choice = 5
+J_choice = 6
 L_choice = 4
 max_order_choice = 2
 scattering = HarmonicScattering3D(J=J_choice, shape=(64,64,64),\
