@@ -35,6 +35,8 @@ temp = np.load('../Zeldovich_Approximation.npz')
 sim_z0 = temp["sim_z0"]
 sim_z50 = temp["sim_z50"]
 
+CDF_t = torch.from_numpy(np.sort(sim_z0[0,:,:,:].flatten())).type(torch.cuda.FloatTensor) + 5.
+
 
 #=========================================================================================================
 # main body of the script
@@ -61,7 +63,7 @@ def main():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*50, 1e-3], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*50, 1e-1], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -77,6 +79,10 @@ def main():
         for i in range(int(num_step)):
             scattering_coeff = scattering(model_fit.param).view(-1).log();
             loss = ((target_coeff-scattering_coeff)**2).sum();
+
+            #loss_2 = ((torch.sort(model_fit.param).values[0,::4] - CDF_t)**2).sum()/5.
+            #print(loss_1/loss_2) # making sure the two losses are of the same order
+            #loss = loss_1 + loss_2
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
