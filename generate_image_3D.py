@@ -1,18 +1,14 @@
 # import packages
-from kymatio import Scattering2D
 import kymatio
+from kymatio import HarmonicScattering3D
 
 import torch.nn as nn
 import torch.optim as optim
 import torch
-import torch.utils.data as utils
 
 import time
 
 import numpy as np
-
-from kymatio import HarmonicScattering3D
-
 
 
 #=========================================================================================================
