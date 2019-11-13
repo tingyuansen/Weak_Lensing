@@ -47,7 +47,7 @@ def main():
 
             # start with a random image
             self.param = torch.nn.Parameter(
-                            torch.from_numpy(sim_z50[0:1,:,:,:]).type(torch.cuda.FloatTensor)
+                            torch.from_numpy(sim_z0[0:1,:,:,:]).type(torch.cuda.FloatTensor)
                         )
 
             # random image
@@ -82,7 +82,6 @@ def main():
             if i%50== 0:
                 # save map
                 np.save("../results_step=" + str(i) + ".npy", model_fit.param.cpu().detach().numpy());
-                #np.save("../scatter_coeff_step=" + str(i) + ".npy", scattering_coeff.cpu().detach().numpy());
                 print(i, loss)
                 print((target_coeff-scattering_coeff).abs()/target_coeff.abs())
 
