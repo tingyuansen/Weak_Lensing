@@ -12,7 +12,7 @@ from kymatio import HarmonicScattering3D
 # make scattering coefficients
 J_choice = 5
 L_choice = 4
-max_order_choice = 1
+max_order_choice = 2
 scattering = HarmonicScattering3D(J=J_choice, shape=(64,64,64),\
                           L=L_choice, max_order=max_order_choice)
 scattering.cuda()
@@ -20,6 +20,7 @@ scattering.cuda()
 import torch
 x_image = torch.from_numpy(sim_z0).type(torch.cuda.FloatTensor)
 scatter_coeff = scattering(x_image).mean(dim=(2,3,4)).cpu().detach().numpy()
+print(scatter_coeff.shape)
 
 # save results
-np.save("../scatter_coeff_max_order=" + str(max_order_choice) + ".npy", scatter_coeff)
+np.save("../scatter_coeff_3D_max_order=" + str(max_order_choice) + ".npy", scatter_coeff)
