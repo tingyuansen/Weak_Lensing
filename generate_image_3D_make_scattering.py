@@ -19,9 +19,8 @@ scattering.cuda()
 
 import torch
 x_image = torch.from_numpy(sim_z0).type(torch.cuda.FloatTensor)
-scatter_coeff = scattering(x_image).view(1,-1)
-#.mean(dim=(2,3,4)).cpu().detach().numpy()
+scatter_coeff = scattering(x_image).view(1,-1).cpu().detach().numpy()
 print(scatter_coeff.shape)
 
 # save results
-#np.save("../scatter_coeff_3D_max_order=" + str(max_order_choice) + ".npy", scatter_coeff)
+np.save("../scatter_coeff_3D_max_order=" + str(max_order_choice) + ".npy", scatter_coeff)
