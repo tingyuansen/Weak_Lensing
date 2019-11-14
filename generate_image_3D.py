@@ -49,7 +49,7 @@ def main():
 
             # start with a random image
             self.param = torch.nn.Parameter(
-                            torch.from_numpy(sim_z0[10:11,:,:,:]).type(torch.cuda.FloatTensor)
+                            torch.from_numpy(sim_z50[0:1,:,:,:]).type(torch.cuda.FloatTensor)
                         )
 
             # random image
