@@ -35,7 +35,7 @@ temp = np.load('../Zeldovich_Approximation.npz')
 sim_z0 = temp["sim_z0"]
 sim_z50 = temp["sim_z50"]
 
-CDF_t = torch.from_numpy(np.sort(sim_z0[0,:,:,:].flatten())).type(torch.cuda.FloatTensor) + 5.
+CDF_t = torch.from_numpy(np.sort(sim_z0[0,:,:,:].flatten())).type(torch.cuda.FloatTensor)
 
 
 #=========================================================================================================
