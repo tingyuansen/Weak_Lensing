@@ -78,8 +78,8 @@ def main():
         # optimize
         for i in range(int(num_step)):
             scattering_coeff = scattering(model_fit.param).view(-1).log();
-            loss_1 = ((target_coeff[1:]-scattering_coeff[1:])**2).sum();
-            loss_2 = ((torch.sort(model_fit.param.flatten()).values - CDF_t)**2).sum()/100.
+            loss_1 = ((target_coeff[1:]-scattering_coeff[1:])**2).mean();
+            loss_2 = ((torch.sort(model_fit.param.flatten()).values - CDF_t)**2).mean()/1.
             print(loss_1/loss_2) # making sure the two losses are of the same order
             loss = loss_1 + loss_2
 
