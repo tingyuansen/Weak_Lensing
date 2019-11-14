@@ -71,7 +71,7 @@ def main():
         # optimize
         for i in range(int(num_step)):
             scattering_coeff = scattering(model_fit.param.reshape(1,num_pixel,num_pixel,num_pixel)).view(-1).log();
-            print(scatter_coeff.shape)
+            print(scattering_coeff.shape)
             print(target_coeff.shape)
             loss_1 = ((target_coeff-scattering_coeff)**2).sum();
             loss_2 = ((torch.sort(model_fit.param).values - CDF_t)**2).sum()
