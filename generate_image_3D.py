@@ -25,10 +25,6 @@ scattering = HarmonicScattering3D(J=J_choice, shape=(64,64,64),\
                           L=L_choice, max_order=max_order_choice)
 scattering.cuda()
 
-#scattering_target = HarmonicScattering3D(J=J_choice, shape=(64,64,64),\
-#                          L=L_choice, max_order=max_order_choice)
-#scattering_target.cuda()
-
 
 #=========================================================================================================
 # restore scattering coefficient
@@ -57,14 +53,6 @@ def main():
                             torch.from_numpy(sim_z50[0:1,:,:,:]).type(torch.cuda.FloatTensor)
                         )
 
-            # random image
-            # star with the same image but with random phase
-            #self.param = torch.nn.Parameter(
-            #    torch.from_numpy(
-            #        get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1)
-            #    ).type(torch.cuda.FloatTensor) + 5.
-            #)
-
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
@@ -83,8 +71,8 @@ def main():
         # optimize
         for i in range(int(num_step)):
             scattering_coeff = scattering(model_fit.param).view(-1).log();
-            loss_1 = ((target_coeff[1:]-scattering_coeff[1:])**2).sum();
-            loss_2 = ((torch.sort(model_fit.param.flatten()).values - CDF_t)**2).sum()
+            loss_1 = ((target_coeff[1:]-scattering_coeff[1:]).abs()).sum();
+            loss_2 = ((torch.sort(model_fit.param.flatten()).values - CDF_t).abs()).sum()
             print(loss_1/loss_2)
             loss = loss_1 + loss_2
 
@@ -92,6 +80,7 @@ def main():
             if i%50== 0:
                 # save map
                 np.save("../results_step=" + str(i) + ".npy", model_fit.param.cpu().detach().numpy());
+                np.save("../scatter_coeff_step=" + str(i) + ".npy", scattering_coeff.cpu().detach().numpy());
                 print(i, loss)
                 print((target_coeff-scattering_coeff).abs()/target_coeff.abs())
 
