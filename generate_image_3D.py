@@ -50,7 +50,7 @@ def main():
 
             # start with a random image
             self.param = torch.nn.Parameter(
-                            torch.from_numpy(sim_z50[0:1,:,:,:]).type(torch.cuda.FloatTensor)
+                            torch.from_numpy(sim_z50[0,:,:,:].ravel()).type(torch.cuda.FloatTensor)
                         )
 
 #---------------------------------------------------------------------------------------------------------
@@ -70,9 +70,11 @@ def main():
 
         # optimize
         for i in range(int(num_step)):
-            scattering_coeff = scattering(model_fit.param).view(-1).log();
-            loss_1 = ((target_coeff[1:]-scattering_coeff[1:]).abs()).sum();
-            loss_2 = ((torch.sort(model_fit.param.flatten()).values - CDF_t).abs()).sum()
+            scattering_coeff = scattering(model_fit.param.reshape(1,num_pixel,num_pixel,num_pixel)).view(-1).log();
+            print(scatter_coeff.shape)
+            print(target_coeff.shape)
+            loss_1 = ((target_coeff-scattering_coeff)**2).sum();
+            loss_2 = ((torch.sort(model_fit.param).values - CDF_t)**2).sum()
             print(loss_1/loss_2)
             loss = loss_1 + loss_2
 
