@@ -63,7 +63,7 @@ def main():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*50, 1e-1], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*50, 1e-2], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -80,7 +80,7 @@ def main():
             scattering_coeff = scattering(model_fit.param).view(-1).log();
             loss_1 = ((target_coeff[1:]-scattering_coeff[1:])**2).sum();
             loss_2 = ((torch.sort(model_fit.param.flatten()).values - CDF_t)**2).sum()
-            print(loss_1/loss_2) # making sure the two losses are of the same order
+            print(loss_1/loss_2)
             loss = loss_1 + loss_2
 
 #---------------------------------------------------------------------------------------------------------
