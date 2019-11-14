@@ -18,8 +18,8 @@ num_pixel = 64
 
 # define scattering
 J_choice = 6
-L_choice = 3
-max_order_choice = 1
+L_choice = 5
+max_order_choice = 2
 
 scattering = HarmonicScattering3D(J=J_choice, shape=(64,64,64),\
                           L=L_choice, max_order=max_order_choice)
@@ -28,7 +28,7 @@ scattering.cuda()
 
 #=========================================================================================================
 # restore scattering coefficient
-target_coeff = np.load("scatter_coeff_3D_max_order=1.npy")[0,:]
+target_coeff = np.load("scatter_coeff_3D_max_order=2.npy")[0,:]
 target_coeff = torch.from_numpy(np.log(target_coeff)).type(torch.cuda.FloatTensor)
 
 # restore data
