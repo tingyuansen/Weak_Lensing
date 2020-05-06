@@ -26,9 +26,6 @@ The [tutorial](blah) shows some simple use cases.
 ## Authors
 * [Yuan-Sen Ting](http://www.sns.ias.edu/~ting/) -- ting at ias dot edu
 * [Sihao Cheng](https://pages.jh.edu/~scheng40/index.html)
-* [Nesar Ramachadra](https://www.anl.gov/profile/nesar-soorve-ramachandra)
-* [Dezso Ribli](https://github.com/riblidezso)
-* [Francoise Lanusse](https://flanusse.net/)
 
 ## Licensing
 
