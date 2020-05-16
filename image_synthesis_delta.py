@@ -82,10 +82,13 @@ def generate_image():
     # target ccoefficients
     image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor)
     print(image_initial.shape)
-    scattering_target = Scattering2D(J=J_choice, shape=(256,256),\
-                                  L=L_choice, max_order=max_order_choice)
-    scattering_target.cuda()
-    target_coeff = scattering_target(image_initial).mean(dim=(2,3))[0,:].log();
+    # scattering_target = Scattering2D(J=J_choice, shape=(256,256),\
+    #                               L=L_choice, max_order=max_order_choice)
+    # scattering_target.cuda()
+    # target_coeff = scattering_target(image_initial).mean(dim=(2,3))[0,:].log();
+
+    # L2 norm
+    target_coeff = (image_initial**2).mean()
 
 #----------------------------------------------------------------------------------------------------------
     # define mock image
@@ -117,12 +120,15 @@ def generate_image():
 
         # optimize
         for i in range(int(num_step)):
-            scattering_coeff = scattering(model_fit.param.reshape(1,num_pixel,num_pixel))\
-                                    .mean(dim=(2,3))[0,:].log();
-            loss = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
+            #scattering_coeff = scattering(model_fit.param.reshape(1,num_pixel,num_pixel))\
+            #                        .mean(dim=(2,3))[0,:].log();
+            #loss = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
             #loss_2 = ((torch.sort(model_fit.param).values[0,::4] - CDF_t)**2).sum()/5.
             #print(loss_1/loss_2) # making sure the two losses are of the same order
 
+            scattering_coeff = (model_fit.param**2).mean();
+            loss = ((target_coeff-scattering_coeff)**2).sum()
+            
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
                 print(i, loss)
