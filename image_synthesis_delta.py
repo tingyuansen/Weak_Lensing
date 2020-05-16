@@ -75,7 +75,7 @@ scattering.cuda()
 def generate_image():
 
     # load an initial guess
-    image = np.load("image_initial.npy")[0:1,:,:]
+    image = np.load("image_initial.npy")[0,:,:]
     #CDF_t = torch.from_numpy(np.sort(image.flatten())).type(torch.cuda.FloatTensor) + 5.
 
 #----------------------------------------------------------------------------------------------------------
