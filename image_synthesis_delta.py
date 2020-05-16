@@ -126,7 +126,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
                 print(i, loss)
-                print((target_coeff[1:]-scattering_coeff[1:]).abs()/target_coeff[1:].abs())
+                #print((target_coeff[1:]-scattering_coeff[1:]).abs()/target_coeff[1:].abs())
 
             optimizer.zero_grad();
             loss.backward();
