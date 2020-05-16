@@ -132,7 +132,7 @@ def generate_image():
             loss.backward();
             optimizer.step();
 
-        np.save("delta_recovery.npy", model_fit.param.cpu().detach().numpy());
+        np.save("../delta_recovery.npy", model_fit.param.cpu().detach().numpy());
 
 #---------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
