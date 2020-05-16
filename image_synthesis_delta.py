@@ -75,12 +75,12 @@ scattering.cuda()
 def generate_image():
 
     # load an initial guess
-    image = np.load("image_initial.npy")[0,:,:]
+    image = np.load("image_initial.npy")[0:1,:,:]
     #CDF_t = torch.from_numpy(np.sort(image.flatten())).type(torch.cuda.FloatTensor) + 5.
 
 #----------------------------------------------------------------------------------------------------------
     # target ccoefficients
-    image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor)
+    image_initial = torch.from_numpy(image[0]).type(torch.cuda.FloatTensor)
     scattering_target = Scattering2D(J=J_choice, shape=(256,256),\
                                   L=L_choice, max_order=max_order_choice)
     scattering_target.cuda()
