@@ -36,16 +36,16 @@ def generate_image():
 
 #----------------------------------------------------------------------------------------------------------
     # target ccoefficients
-    image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor)
-    print(image_initial.shape)
+    image_GPU = torch.from_numpy(image).type(torch.cuda.FloatTensor)
+    #print(image_initial.shape)
     # scattering_target = Scattering2D(J=J_choice, shape=(256,256),\
     #                               L=L_choice, max_order=max_order_choice)
     # scattering_target.cuda()
     # target_coeff = scattering_target(image_initial).mean(dim=(2,3))[0,:].log();
 
     # L2 norm
-    target_coeff = ((image_initial).abs()).mean()
-    print(target_coeff)
+    #target_coeff = ((image_initial).abs()).mean()
+    #print(target_coeff)
 
 #----------------------------------------------------------------------------------------------------------
     # define mock image
@@ -54,25 +54,33 @@ def generate_image():
             super(model_image, self).__init__()
 
             # star with the same image but with random phase
-            self.param = torch.nn.Parameter(
-                torch.from_numpy(
-                    np.random.uniform(size=(1,256,256))
-                ).type(torch.cuda.FloatTensor)
-            )
+            self.param = torch.nn.Parameter(torch.rand(1,256,256).type(torch.cuda.FloatTensor))
+
+            # self.param = torch.nn.Parameter(
+            #     torch.from_numpy(
+            #         np.random.uniform(size=(1,256,256))
+            #     ).type(torch.cuda.FloatTensor)
+            # )
 
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*50, 1e-2], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*50, 1e-3], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
 
         # define learn hyper parameter
+        # num_step = learnable_param_list[learnable_group][0]
+        # learning_rate = learnable_param_list[learnable_group][1]
+        #
+        # # define optimizer
+        # optimizer = optim.SGD(model_fit.parameters(), lr=learning_rate)
+
         num_step = learnable_param_list[learnable_group][0]
         learning_rate = learnable_param_list[learnable_group][1]
 
-        # define optimizer
+        # optimizer = optim.Adam(model_fit.parameters(), lr=learning_rate)
         optimizer = optim.SGD(model_fit.parameters(), lr=learning_rate)
 
         # optimize
@@ -96,6 +104,25 @@ def generate_image():
             # print(scattering_coeff)
             # loss = ((target_coeff-scattering_coeff).abs()).sum()
 
+            # loss: L2
+            loss_L2 = ((((model_fit.param.reshape(1,num_pixel,num_pixel) - 5)**2).mean()**0.5 - \
+                       ((image_GPU-5)**2).mean()**0.5) / ((image_GPU-5)**2).mean()**0.5 )**2
+
+            # loss: L1
+            loss_L1 = (( (model_fit.param.reshape(1,num_pixel,num_pixel) - 5).abs().mean() - (image_GPU-5).abs().mean() )\
+                        /(image_GPU-5).abs().mean() )**2
+
+            # loss: mean
+            loss_mean = ((model_fit.param.reshape(1,num_pixel,num_pixel) - 5).mean() - (image_GPU-5).mean())**2
+
+            # loss_bound = (5 - model_fit.param.reshape(1,num_pixel,num_pixel)).mean() + \
+            #              ( model_fit.param.reshape(1,num_pixel,num_pixel) - 10).mean()
+
+            # loss: 1st moment
+            # loss = loss_PS * 0 + loss_CDF * 0 + loss_bound * 0 +\
+            #         loss_L1 + loss_L2 + loss_mean
+            loss = loss_L1 + loss_L2 + loss_mean
+
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
                 print(i, loss)
@@ -105,7 +132,7 @@ def generate_image():
             loss.backward();
             optimizer.step();
 
-        np.save("../delta_recovery.npy", model_fit.param.cpu().detach().numpy());
+    np.save("../delta_recovery.npy", model_fit.param.cpu().detach().numpy());
 
 #---------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
