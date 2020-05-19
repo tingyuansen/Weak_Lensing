@@ -228,7 +228,7 @@ def image_synthesis(image,
 
 #----------------------------------------------------------------------------------------------------------
     # save map
-    np.save(savedir +'synthesis_results_final.npy', model_fit.param.reshape(1,num_pixel,num_pixel).cpu().detach().numpy()-5);
+    np.save(savedir +'delta_recovery.npy', model_fit.param.reshape(1,num_pixel,num_pixel).cpu().detach().numpy()-5);
 
 
 directory = '/home/yting/'
