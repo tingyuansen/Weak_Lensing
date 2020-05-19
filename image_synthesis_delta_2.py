@@ -26,13 +26,9 @@ def image_synthesis(image,
     class model_image(nn.Module):
         def __init__(self):
             super(model_image, self).__init__()
-
-            # initialize with white noise GRF
-            if True:
-                self.param = torch.nn.Parameter(torch.rand(1,256,256).type(torch.cuda.FloatTensor))
+            self.param = torch.nn.Parameter(torch.rand(1,256,256).type(torch.cuda.FloatTensor))
 
 #---------------------------------------------------------------------------------------------------------
-
     model_fit = model_image()
 
     # define learnable
@@ -45,19 +41,8 @@ def image_synthesis(image,
 
         # optimize
         for i in range(int(num_step)):
-
-            # loss: L2
-            loss_L2 = ((((model_fit.param.reshape(1,256,256))**2).mean()**0.5 - \
-                       ((image_GPU)**2).mean()**0.5) / ((image_GPU)**2).mean()**0.5)**2
-
-            # loss: L1
-            loss_L1 = (( (model_fit.param.reshape(1,256,256)).abs().mean() - (image_GPU).abs().mean() )\
+            loss = (( (model_fit.param.reshape(1,256,256)).abs().mean() - (image_GPU).abs().mean() )\
                         /(image_GPU).abs().mean())**2
-
-            # loss: mean
-            loss_mean = ((model_fit.param.reshape(1,256,256)).mean() - (image_GPU).mean())**2
-
-            loss = loss_L1 + loss_L2*0 #+ loss_mean
 
             if i%100== 0:
                 print(i)
