@@ -110,15 +110,15 @@ def image_synthesis(image,
         for i in range(int(num_step)):
 
             # loss: L2
-            loss_L2 = ((((model_fit.param.reshape(1,num_pixel,num_pixel) - 5)**2).mean()**0.5 - \
+            loss_L2 = ((((model_fit.param.reshape(1,256,256) - 5)**2).mean()**0.5 - \
                        ((image_GPU-5)**2).mean()**0.5) / ((image_GPU-5)**2).mean()**0.5 )**2
 
             # loss: L1
-            loss_L1 = (( (model_fit.param.reshape(1,num_pixel,num_pixel) - 5).abs().mean() - (image_GPU-5).abs().mean() )\
+            loss_L1 = (( (model_fit.param.reshape(1,256,256) - 5).abs().mean() - (image_GPU-5).abs().mean() )\
                         /(image_GPU-5).abs().mean() )**2
 
             # loss: mean
-            loss_mean = ((model_fit.param.reshape(1,num_pixel,num_pixel) - 5).mean() - (image_GPU-5).mean())**2
+            loss_mean = ((model_fit.param.reshape(1,256,256) - 5).mean() - (image_GPU-5).mean())**2
 
             loss = loss_L1 + loss_L2*0 #+ loss_mean
 
