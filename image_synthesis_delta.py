@@ -92,8 +92,8 @@ def generate_image():
             #print(loss_1/loss_2) # making sure the two losses are of the same order
 
             # loss: L2
-            loss = ((((model_fit.param.reshape(1,num_pixel,num_pixel))**2).mean()**0.5 - \
-                       ((image_initial)**2).mean()**0.5) / ((image_initial)**2).mean()**0.5 )**2
+            # loss = ((((model_fit.param.reshape(1,num_pixel,num_pixel))**2).mean()**0.5 - \
+            #            ((image_initial)**2).mean()**0.5) / ((image_initial)**2).mean()**0.5 )**2
 
             # loss: L1
             #loss_L1 = (( (model_fit.param.reshape(1,num_pixel,num_pixel) - 5).abs().mean() - (image_GPU-5).abs().mean() )\
