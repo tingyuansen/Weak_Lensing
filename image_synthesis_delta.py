@@ -67,8 +67,7 @@ def generate_image():
             # loss_mean = ((model_fit.param.reshape(1,num_pixel,num_pixel) - 5).mean() - (image_GPU-5).mean())**2
             # loss = loss_L1 + loss_L2 + loss_mean
 
-            loss = (( (model_fit.param).abs().mean() - (image_GPU).abs().mean() )\
-                        /(image_GPU).abs().mean())**2
+            loss = ((model_fit.param).abs().mean() - (image_GPU).abs().mean())**2
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
