@@ -89,6 +89,7 @@ def generate_image():
 
     # L2 norm
     target_coeff = ((image_initial).abs()).mean()
+    print(target_coeff)
 
 #----------------------------------------------------------------------------------------------------------
     # define mock image
@@ -106,7 +107,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*50, 1e-2], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*50, 1e-3], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -127,6 +128,7 @@ def generate_image():
             #print(loss_1/loss_2) # making sure the two losses are of the same order
 
             scattering_coeff = ((model_fit.param).abs()).mean();
+            print(scattering_coeff)
             loss = ((target_coeff-scattering_coeff).abs()).sum()
 
 #---------------------------------------------------------------------------------------------------------
