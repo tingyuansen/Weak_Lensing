@@ -99,7 +99,7 @@ def generate_image():
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
                 torch.from_numpy(
-                    np.random.uniform(size=(1,256,256))
+                    np.random.randint(0,2,size=(1,256,256))
                 ).type(torch.cuda.FloatTensor)
             )
 
