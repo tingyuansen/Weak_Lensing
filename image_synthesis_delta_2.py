@@ -145,7 +145,7 @@ directory = '/home/yting/'
 # image = np.load(my_file)[0,:256,:256]
 
 # Delta function
-image = np.random.rand(256,256)<0.3
+image = np.random.rand(256,256)<0.01
 
 # synthesise
 image_synthesis(image,
