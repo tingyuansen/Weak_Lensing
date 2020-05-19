@@ -19,7 +19,7 @@ def image_synthesis(image,
                     savedir = '/home/yting',):
 
     image = image[None, :, :]
-    image_GPU = torch.from_numpy(image).type(torch.cuda.FloatTensor) + 5
+    image_GPU = torch.from_numpy(image).type(torch.cuda.FloatTensor)
 
 #----------------------------------------------------------------------------------------------------------
     # define mock image
@@ -29,7 +29,7 @@ def image_synthesis(image,
 
             # initialize with white noise GRF
             if True:
-                self.param = torch.nn.Parameter(torch.randn(1,256,256).type(torch.cuda.FloatTensor)*0.2+6)
+                self.param = torch.nn.Parameter(torch.rand(1,256,256).type(torch.cuda.FloatTensor))
 
 #---------------------------------------------------------------------------------------------------------
 
@@ -47,23 +47,21 @@ def image_synthesis(image,
         for i in range(int(num_step)):
 
             # loss: L2
-            loss_L2 = ((((model_fit.param.reshape(1,256,256) - 5)**2).mean()**0.5 - \
-                       ((image_GPU-5)**2).mean()**0.5) / ((image_GPU-5)**2).mean()**0.5 )**2
+            loss_L2 = ((((model_fit.param.reshape(1,256,256))**2).mean()**0.5 - \
+                       ((image_GPU)**2).mean()**0.5) / ((image_GPU)**2).mean()**0.5)**2
 
             # loss: L1
-            loss_L1 = (( (model_fit.param.reshape(1,256,256) - 5).abs().mean() - (image_GPU-5).abs().mean() )\
-                        /(image_GPU-5).abs().mean() )**2
+            loss_L1 = (( (model_fit.param.reshape(1,256,256)).abs().mean() - (image_GPU).abs().mean() )\
+                        /(image_GPU).abs().mean())**2
 
             # loss: mean
-            loss_mean = ((model_fit.param.reshape(1,256,256) - 5).mean() - (image_GPU-5).mean())**2
+            loss_mean = ((model_fit.param.reshape(1,256,256)).mean() - (image_GPU).mean())**2
 
             loss = loss_L1 + loss_L2*0 #+ loss_mean
 
             if i%100== 0:
-                # save map
                 print(i)
                 print('loss: ',loss)
-
 
             optimizer.zero_grad();
             loss.backward();
@@ -72,7 +70,7 @@ def image_synthesis(image,
 
 #----------------------------------------------------------------------------------------------------------
     # save map
-    np.save(savedir +'delta_recovery.npy', model_fit.param.reshape(1,256,256).cpu().detach().numpy()-5);
+    np.save(savedir +'delta_recovery.npy', model_fit.param.reshape(1,256,256).cpu().detach().numpy());
 
 
 directory = '/home/yting/'
