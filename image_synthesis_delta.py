@@ -88,7 +88,7 @@ def generate_image():
     # target_coeff = scattering_target(image_initial).mean(dim=(2,3))[0,:].log();
 
     # L2 norm
-    target_coeff = ((image_initial)**2).mean()
+    target_coeff = ((image_initial).abs()).mean()
 
 #----------------------------------------------------------------------------------------------------------
     # define mock image
@@ -126,8 +126,8 @@ def generate_image():
             #loss_2 = ((torch.sort(model_fit.param).values[0,::4] - CDF_t)**2).sum()/5.
             #print(loss_1/loss_2) # making sure the two losses are of the same order
 
-            scattering_coeff = ((model_fit.param)**2).mean();
-            loss = ((target_coeff-scattering_coeff)**2).sum()
+            scattering_coeff = ((model_fit.param).abs()).mean();
+            loss = ((target_coeff-scattering_coeff).abs()).sum()
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
