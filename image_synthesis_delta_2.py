@@ -231,7 +231,7 @@ def image_synthesis(image,
     np.save(savedir +'synthesis_results_final.npy', model_fit.param.reshape(1,num_pixel,num_pixel).cpu().detach().numpy()-5);
 
 
-directory = '/home/yting'
+directory = '/home/yting/'
 
 # lensing map
 # my_file = directory + 'image_initial.npy'
