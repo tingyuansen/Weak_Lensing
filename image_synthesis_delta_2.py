@@ -86,13 +86,13 @@ def image_synthesis(image,
             if True:
                 self.param = torch.nn.Parameter(
                     torch.from_numpy(
-                        get_random_data(image, num_pixel,num_pixel).reshape(1,-1)
+                        get_random_data(image, 256, 256).reshape(1,-1)
                     ).type(torch.cuda.FloatTensor) + 5
                 )
 
             # initialize with white noise GRF
             if True:
-                self.param = torch.nn.Parameter(torch.randn(1,num_pixel,num_pixel).type(torch.cuda.FloatTensor)*0.2+6)
+                self.param = torch.nn.Parameter(torch.randn(1,256,256).type(torch.cuda.FloatTensor)*0.2+6)
 
 #---------------------------------------------------------------------------------------------------------
 
