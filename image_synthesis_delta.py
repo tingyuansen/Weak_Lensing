@@ -39,7 +39,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [(100*2, 1e-0),(100*50, 1e-1)]
+    learnable_param_list = [(100*2, 1e-0),(100*500, 1e-1)]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -51,21 +51,17 @@ def generate_image():
 
         # optimize
         for i in range(int(num_step)):
-            # scattering_coeff = ((model_fit.param).abs()).mean();
-            # print(scattering_coeff)
-            # loss = ((target_coeff-scattering_coeff).abs()).sum()
-
             # loss: L2
-            # loss_L2 = ((((model_fit.param.reshape(1,num_pixel,num_pixel) - 5)**2).mean()**0.5 - \
-            #            ((image_GPU-5)**2).mean()**0.5) / ((image_GPU-5)**2).mean()**0.5 )**2
-            #
-            # # loss: L1
+            loss_L2 = (((model_fit.param**2).mean()**0.5 - \
+                       (image_GPU**2).mean()**0.5) / (image_GPU**2).mean()**0.5 )**2
+
+            # loss: L1
             loss_L1 = ( (model_fit.param.abs().mean() - image_GPU.abs().mean() )\
                         /image_GPU.abs().mean() )**2
             #
             # # loss: mean
             # loss_mean = ((model_fit.param.reshape(1,num_pixel,num_pixel) - 5).mean() - (image_GPU-5).mean())**2
-            loss = loss_L1 #+ loss_L2 + loss_mean
+            loss = loss_L1 + loss_L2 #+ loss_mean
 
 
 #---------------------------------------------------------------------------------------------------------
