@@ -120,7 +120,6 @@ def generate_image():
                                     .mean(dim=(2,3))[0,:].log();
 
             loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
-            print('target_mean', image_initial.mean())
             loss_mean = ((model_fit.param.mean() - image_initial.mean())/image_initial.mean())**2
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
 
@@ -130,6 +129,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
                 print(i, loss_st, loss_mean)
+                print(model_fit.param.mean(),image_initial.mean())
                 #print((target_coeff[1:]-scattering_coeff[1:]).abs()/target_coeff[1:].abs())
 
             optimizer.zero_grad();
