@@ -39,7 +39,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [(100*20, 1e-0),(100*50000, 1e-1)]
+    learnable_param_list = [(100*20, 1e-0),(100*500000, 1e-1)]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -71,7 +71,7 @@ def generate_image():
                 print(i, loss)
 
             if i%5000==0:
-                np.save("../delta_recovery.npy", (1./(1.+(-1*model_fit.param).exp())).cpu().detach().numpy());
+                np.save("../delta_recovery_" + str(i) + ".npy", (1./(1.+(-1*model_fit.param).exp())).cpu().detach().numpy());
 
             optimizer.zero_grad();
             loss.backward();
