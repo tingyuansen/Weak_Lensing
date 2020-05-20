@@ -76,7 +76,7 @@ def generate_image():
 
     # load an initial guess
     image = np.load("image_initial.npy")[0:1,:,:]
-    CDF_t = torch.from_numpy(np.sort(image.flatten())).type(torch.cuda.FloatTensor) + 5.
+    #CDF_t = torch.from_numpy(np.sort(image.flatten())).type(torch.cuda.FloatTensor) + 5.
 
 #----------------------------------------------------------------------------------------------------------
     # target ccoefficients
@@ -118,10 +118,10 @@ def generate_image():
         for i in range(int(num_step)):
             scattering_coeff = scattering(model_fit.param.reshape(1,num_pixel,num_pixel))\
                                     .mean(dim=(2,3))[0,:].log();
-            loss_1 = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
-            loss_2 = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
-            print(loss_1/loss_2) # making sure the two losses are of the same order
-            loss = loss_1 + loss_2
+            loss = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
+            #loss_2 = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
+            #print(loss_1/loss_2)
+            #loss = loss_1
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
