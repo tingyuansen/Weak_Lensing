@@ -119,7 +119,7 @@ def generate_image():
             scattering_coeff = scattering(model_fit.param.reshape(1,num_pixel,num_pixel))\
                                     .mean(dim=(2,3))[0,:].log();
             loss_1 = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
-            loss_2 = ((torch.sort(model_fit.param).values[0,::4] - CDF_t)**2).sum()/5.
+            loss_2 = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
             print(loss_1/loss_2) # making sure the two losses are of the same order
             loss = loss_1 + loss_2
 
