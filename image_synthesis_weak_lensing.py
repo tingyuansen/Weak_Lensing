@@ -118,9 +118,11 @@ def generate_image():
         for i in range(int(num_step)):
             scattering_coeff = scattering(model_fit.param.reshape(1,num_pixel,num_pixel))\
                                     .mean(dim=(2,3))[0,:].log();
+                                    
             loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
             loss_mean = (model_fit.param.mean() - image_initial.mean())**2
-            #loss_2 = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
+            #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
+
             loss = loss_st + loss_mean
 
 
