@@ -39,7 +39,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [(100*2, 1e-0),(100*5000, 1e-1)]
+    learnable_param_list = [(100*2, 1e-0),(100*500, 1e-1)]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -52,16 +52,17 @@ def generate_image():
         # optimize
         for i in range(int(num_step)):
             # loss: L2
-            loss_L2 = (((model_fit.param**2).mean()**0.5 - \
+
+            loss_L2 = ((((1./(1.+(-1*model_fit.param).exp())**2).mean()**0.5 - \
                        (image_GPU**2).mean()**0.5) / (image_GPU**2).mean()**0.5 )**2
 
             # loss: L1
-            loss_L1 = ( (model_fit.param.abs().mean() - image_GPU.abs().mean() )\
+            loss_L1 = ( ((1./(1.+(-1*model_fit.param).exp()).abs().mean() - image_GPU.abs().mean() )\
                         /image_GPU.abs().mean() )**2
             #
             # # loss: mean
-            loss_mean = (model_fit.param.mean() - image_GPU.mean())**2
-            
+            loss_mean = ((1./(1.+(-1*model_fit.param).exp()).mean() - image_GPU.mean())**2
+
             loss =  loss_L2 + loss_L1 + loss_mean
 
 
