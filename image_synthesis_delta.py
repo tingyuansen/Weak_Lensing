@@ -34,7 +34,7 @@ def generate_image():
     class model_image(nn.Module):
         def __init__(self):
             super(model_image, self).__init__()
-            self.param = torch.nn.Parameter(torch.randn(1,256,256).type(torch.cuda.FloatTensor))
+            self.param = torch.nn.Parameter(torch.rand(1,256,256).type(torch.cuda.FloatTensor))
 
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
