@@ -39,7 +39,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [(100*2, 1e-0),(100*500, 1e-1)]
+    learnable_param_list = [(100*200, 1e-0),(100*500, 1e-1)]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
