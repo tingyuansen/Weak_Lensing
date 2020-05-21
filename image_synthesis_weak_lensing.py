@@ -104,7 +104,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*50, 1e1], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*50, 1e0], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -145,7 +145,7 @@ def generate_image():
                                     /  ((image_diff_std**3).mean()) )**2
 
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
-            loss = loss_st + loss_mean + loss_L1 + loss_L2 + loss_L3
+            loss = loss_st + loss_mean  + loss_L2 + loss_L3 #+ loss_L1
 
 
 #---------------------------------------------------------------------------------------------------------
