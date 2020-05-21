@@ -95,14 +95,14 @@ def generate_image():
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
                torch.from_numpy(
-                   get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1) - 0.05
+                   get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1)
                ).type(torch.cuda.FloatTensor)
             )
 
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*50, 1e-1], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*5000, 1e-1], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -134,6 +134,8 @@ def generate_image():
             if i%50== 0:
                 print(i, loss_st, loss_mean, loss_L2, loss_L1)
                 print(model_fit.param.abs().mean(), image_initial.abs().mean())
+                np.save("../max_order=2_temp.npy", model_fit.param.cpu().detach().numpy());
+                np.save("../max_order=2_scatter_coeff_temp.npy", scattering_coeff.cpu().detach().numpy());
 
             optimizer.zero_grad();
             loss.backward();
