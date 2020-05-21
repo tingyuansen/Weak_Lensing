@@ -76,6 +76,8 @@ def generate_image():
 
     # load an initial guess
     image = np.load("image_initial.npy")[0:1,:,:]
+    image[image < -0.02934368796646595] = -0.02934368796646595
+    image[image > 0.08139952920377262] = 0.08139952920377262
     #CDF_t = torch.from_numpy(np.sort(image.flatten())).type(torch.cuda.FloatTensor) + 5.
 
 #----------------------------------------------------------------------------------------------------------
