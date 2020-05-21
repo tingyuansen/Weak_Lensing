@@ -143,8 +143,8 @@ def generate_image():
             loss_L2 = (( ((model_diff**2).mean())**(1./2.) - ((image_diff**2).mean())**(1./2.) )\
                                     /  (((image_diff**2).mean())**(1./2.)))**2
 
-            loss_L3 = (( ((model_diff**3).mean())**(1./3.) - ((image_diff**3).mean())**(1./3.) )\
-                                    /  (((image_diff**3).mean())**(1./3.)))**2
+            loss_L3 = (( ((model_diff**3).mean()) - ((image_diff**3).mean()) )\
+                                    /  (((image_diff**3).mean())))**2
 
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
             loss = loss_st + loss_mean + loss_L1 + loss_L2 + loss_L3
@@ -152,8 +152,12 @@ def generate_image():
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
-                print(i, loss_st, loss_mean, loss_L1, loss_L2, loss_L3)
-                print(((model_diff**3).mean())**(1./3.), ((image_diff**3).mean())**(1./3.))
+                print(i)
+                print('ST loss', loss_st)
+                print('Mean loss', loss_mean)
+                print('L1 loss', loss_L1)
+                print('L2 loss', loss_L2)
+                print('L3 loss', loss_L3)
                 np.save("../max_order=2_temp.npy", model_cull.cpu().detach().numpy());
                 np.save("../max_order=2_scatter_coeff_temp.npy", scattering_coeff.cpu().detach().numpy());
 
