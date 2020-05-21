@@ -150,7 +150,7 @@ def generate_image():
             if i < 200:
                 loss =  loss_mean + loss_L1 + loss_L2 + loss_L3
             else:
-                loss =  loss_st + loss_mean + loss_L1 + loss_L2 + loss_L3
+                loss =  loss_st + loss_mean + loss_L1 + loss_L2 
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
