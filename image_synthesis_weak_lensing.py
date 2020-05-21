@@ -132,7 +132,6 @@ def generate_image():
                                     .mean(dim=(2,3))[0,:].log();
             loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum()
 
-
             # constaint of different moments
             model_diff = model_cull - model_mean
             image_diff = image_initial - image_mean
