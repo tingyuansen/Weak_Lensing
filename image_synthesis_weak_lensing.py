@@ -123,15 +123,17 @@ def generate_image():
             loss_mean = ((model_fit.param.mean() - image_initial.mean()))**2
             loss_L2 = (((model_fit.param**2).mean()**0.5 - (image_initial**2).mean()**0.5)\
                             / (image_initial**2).mean()**0.5)**2
+            loss_L1 = ((model_fit.param.abs().mean() - image_initial.abs().mean())\
+                                    /image_initial.abs().mean())**2
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
 
-            loss = loss_st + loss_mean + loss_L2
+            loss = loss_st + loss_mean + loss_L2 + loss_L1
 
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
-                print(i, loss_st, loss_mean, loss_L2)
-                print((model_fit.param**2).mean()**0.5, (image_initial**2).mean()**0.5)
+                print(i, loss_st, loss_mean, loss_L2, loss_L1)
+                print(model_fit.param.abs().mean(), image_initial.abs().mean())
 
             optimizer.zero_grad();
             loss.backward();
