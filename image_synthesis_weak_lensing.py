@@ -80,7 +80,7 @@ def generate_image():
 
 #----------------------------------------------------------------------------------------------------------
     # target ccoefficients
-    image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor) 
+    image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor)
     scattering_target = Scattering2D(J=J_choice, shape=(512,512),\
                                   L=L_choice, max_order=max_order_choice)
     scattering_target.cuda()
@@ -102,7 +102,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*50, 1e-1], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*500, 1e-1], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -125,8 +125,8 @@ def generate_image():
                             / (image_initial**2).mean()**0.5)**2
             loss_L1 = ((model_fit.param.abs().mean() - image_initial.abs().mean())\
                                     /image_initial.abs().mean())**2
+                                    
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
-
             loss = loss_st + loss_mean + loss_L2 + loss_L1
 
 
