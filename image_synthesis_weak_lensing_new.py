@@ -104,7 +104,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*500, 1e-1], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*50, 1e-2], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -119,20 +119,34 @@ def generate_image():
         # optimize
         for i in range(int(num_step)):
 
+            # set mean max
             model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
 
+            # constraint with mean
+            model_mean = model_cull.mean()
+            image_mean = image_initial.mean()
+            loss_mean = (model_mean - image_mean)**2
+
+            # calculate scattering coefficients
             scattering_coeff = scattering(model_cull.reshape(1,num_pixel,num_pixel))\
                                     .mean(dim=(2,3))[0,:].log();
+            loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).mean()/10.;
 
-            loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
-            loss_mean = (model_cull.mean() - image_initial.mean())**2
-            loss_L2 = (((model_cull**2).mean()**0.5 - (image_initial**2).mean()**0.5)\
-                            / (image_initial**2).mean()**0.5)**2
+            # constaint of different moments
+            # model_diff = model_cull - model_mean
+            # image_diff = image_initial - image_mean
+            # model_diff_std = model_diff/model_cull.std()
+            # image_diff_std = image_diff/image_initial.std()
+
             loss_L1 = ((model_cull.abs().mean() - image_initial.abs().mean())\
                                     /image_initial.abs().mean())**2
+            loss_L2 = ( (model_cull.std() - image_initial.std())\
+                                    /  (image_initial.std()))**2
+            #loss_L3 = (( ((model_diff_std**3).mean()) - ((image_diff_std**3).mean()) )\
+            #                        /  (((image_diff_std**3).mean())))**2
 
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
-            loss = loss_st + loss_mean + loss_L2 + loss_L1
+            loss = loss_st + loss_mean + loss_L1 + loss_L2 #+ loss_L3
 
 
 #---------------------------------------------------------------------------------------------------------
