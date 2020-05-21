@@ -104,7 +104,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*50, 1e-1], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*50, 1e-2], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -157,7 +157,7 @@ def generate_image():
                 print('L1 loss', loss_L1)
                 print('L2 loss', loss_L2)
                 print('L3 loss', loss_L3)
-                print(((model_diff**3).mean()), ((image_diff**3).mean()))
+                print(((model_diff_std**3).mean()), ((image_diff_std**3).mean()))
                 print(' ')
                 np.save("../max_order=2_temp.npy", model_cull.cpu().detach().numpy());
                 np.save("../max_order=2_scatter_coeff_temp.npy", scattering_coeff.cpu().detach().numpy());
