@@ -80,7 +80,7 @@ def generate_image():
 
 #----------------------------------------------------------------------------------------------------------
     # target ccoefficients
-    image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor) + 5.
+    image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor)
     scattering_target = Scattering2D(J=J_choice, shape=(512,512),\
                                   L=L_choice, max_order=max_order_choice)
     scattering_target.cuda()
@@ -96,7 +96,7 @@ def generate_image():
             self.param = torch.nn.Parameter(
                torch.from_numpy(
                    get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1)
-               ).type(torch.cuda.FloatTensor) + 5.
+               ).type(torch.cuda.FloatTensor)
             )
 
 #---------------------------------------------------------------------------------------------------------
