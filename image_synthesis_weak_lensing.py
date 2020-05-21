@@ -116,10 +116,11 @@ def generate_image():
 
         # optimize
         for i in range(int(num_step)):
-            scattering_coeff = scattering(model_fit.param.reshape(1,num_pixel,num_pixel))\
-                                    .mean(dim=(2,3))[0,:].log();
 
             model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
+
+            scattering_coeff = scattering(model_cull.reshape(1,num_pixel,num_pixel))\
+                                    .mean(dim=(2,3))[0,:].log();
 
             loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
             loss_mean = (model_cull.mean() - image_initial.mean())**2
