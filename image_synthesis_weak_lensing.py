@@ -140,8 +140,8 @@ def generate_image():
 
             loss_L1 = ((model_diff.abs().mean() - image_diff.abs().mean())\
                                     /image_diff.abs().mean())**2
-            loss_L2 = ( (model_cull.std() - image_cull.std())\
-                                    /  (image_cull.std()))**2
+            loss_L2 = ( (model_cull.std() - image_initial.std())\
+                                    /  (image_initial.std()))**2
             loss_L3 = (( ((model_diff_std**3).mean()) - ((image_diff_std**3).mean()) )\
                                     /  (((image_diff_std**3).mean())))**2
 
