@@ -159,14 +159,14 @@ def generate_image():
                 print(((model_diff_std**3).mean()), ((image_diff_std**3).mean()))
                 print(' ')
                 np.save("../max_order=2_temp.npy", model_cull.cpu().detach().numpy());
-                np.save("../max_order=2_scatter_coeff_temp.npy", scattering_coeff.cpu().detach().numpy());
+                #np.save("../max_order=2_scatter_coeff_temp.npy", scattering_coeff.cpu().detach().numpy());
 
             optimizer.zero_grad();
             loss.backward();
             optimizer.step();
 
         np.save("../max_order=2.npy", model_cull.cpu().detach().numpy());
-        np.save("../max_order=2_scatter_coeff.npy", scattering_coeff.cpu().detach().numpy());
+        #np.save("../max_order=2_scatter_coeff.npy", scattering_coeff.cpu().detach().numpy());
 
 #---------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
