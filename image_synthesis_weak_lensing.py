@@ -156,8 +156,8 @@ def generate_image():
                 print('Mean loss', loss_mean)
                 print('L1 loss', loss_L1)
                 print('L2 loss', loss_L2)
-                print('L3 loss', loss_L3)
-                print(((model_diff_std**3).mean()), ((image_diff_std**3).mean()))
+                #print('L3 loss', loss_L3)
+                #print(((model_diff_std**3).mean()), ((image_diff_std**3).mean()))
                 print(' ')
                 np.save("../max_order=2_temp.npy", model_cull.cpu().detach().numpy());
                 np.save("../max_order=2_scatter_coeff_temp.npy", scattering_coeff.cpu().detach().numpy());
