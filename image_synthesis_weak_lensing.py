@@ -126,8 +126,8 @@ def generate_image():
 
             loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum(); # ignore the zeroth order (normalization)
             loss_mean = (model_cull.mean() - image_initial.mean())**2
-            loss_L2 = (((model_cull**2).mean()**0.5 - (image_initial**2).mean()**0.5)\
-                            / (image_initial**2).mean()**0.5)**2
+            loss_L2 = ((model_cull.std() - image_initial.std())\
+                                    / (image_initial.std()))**2
             loss_L1 = ((model_cull.abs().mean() - image_initial.abs().mean())\
                                     /image_initial.abs().mean())**2
 
