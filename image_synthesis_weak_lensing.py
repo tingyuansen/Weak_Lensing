@@ -76,8 +76,8 @@ def generate_image():
 
     # load an initial guess
     image = np.load("image_initial.npy")[0:1,:,:]
-    image[image < -0.02934368796646595] = -0.02934368796646595
-    image[image > 0.08139952920377262] = 0.08139952920377262
+    #image[image < -0.02934368796646595] = -0.02934368796646595
+    #image[image > 0.08139952920377262] = 0.08139952920377262
     #CDF_t = torch.from_numpy(np.sort(image.flatten())).type(torch.cuda.FloatTensor) + 5.
 
 #----------------------------------------------------------------------------------------------------------
@@ -120,7 +120,8 @@ def generate_image():
         for i in range(int(num_step)):
 
             # set mean max
-            model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
+            #model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
+            model_cull = model_fit.param
 
             # constraint with mean
             model_mean = model_cull.mean()
