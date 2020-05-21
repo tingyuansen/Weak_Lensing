@@ -52,7 +52,7 @@ def generate_image():
         # optimize
         for i in range(int(num_step)):
 
-            model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.4158211 -0.09090403
+            model_cull = (1./(1.+(-1*model_fit.param).exp()))
 
             # loss: L2
             loss_L2 = (((model_cull**2).mean()**0.5 - \
