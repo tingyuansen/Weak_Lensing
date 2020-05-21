@@ -147,10 +147,10 @@ def generate_image():
 
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
             #loss =  loss_st + loss_mean + loss_L1 + loss_L2 + loss_L3
-            if (i//200)%2 == 1:
-                loss =  loss_st + loss_mean + loss_L1 + loss_L2 #+ loss_L3
-            else:
+            if i < 200:
                 loss =  loss_mean + loss_L1 + loss_L2 + loss_L3
+            else:
+                loss =  loss_st + loss_mean + loss_L1 + loss_L2 + loss_L3
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
