@@ -136,14 +136,14 @@ def generate_image():
             if i%50== 0:
                 print(i, loss_st, loss_mean, loss_L2, loss_L1)
                 print(model_fit.param.abs().mean(), image_initial.abs().mean())
-                np.save("../max_order=2_temp.npy", model_fit.param.cpu().detach().numpy());
+                np.save("../max_order=2_temp.npy", model_cull.cpu().detach().numpy());
                 np.save("../max_order=2_scatter_coeff_temp.npy", scattering_coeff.cpu().detach().numpy());
 
             optimizer.zero_grad();
             loss.backward();
             optimizer.step();
 
-        np.save("../max_order=2.npy", model_fit.param.cpu().detach().numpy());
+        np.save("../max_order=2.npy", model_cull.cpu().detach().numpy());
         np.save("../max_order=2_scatter_coeff.npy", scattering_coeff.cpu().detach().numpy());
 
 #---------------------------------------------------------------------------------------------------------
