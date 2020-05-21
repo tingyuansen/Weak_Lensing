@@ -123,8 +123,8 @@ def generate_image():
             model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
 
             # constraint with mean
-            # model_mean = model_cull.mean()
-            # image_mean = image_initial.mean()
+            model_mean = model_cull.mean()
+            image_mean = image_initial.mean()
             loss_mean = (model_mean - image_mean)**2
 
             # calculate scattering coefficients
