@@ -80,7 +80,7 @@ def generate_image():
 
 #----------------------------------------------------------------------------------------------------------
     # target ccoefficients
-    image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor)
+    image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor) - 0.05
     scattering_target = Scattering2D(J=J_choice, shape=(512,512),\
                                   L=L_choice, max_order=max_order_choice)
     scattering_target.cuda()
@@ -95,7 +95,7 @@ def generate_image():
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
                torch.from_numpy(
-                   get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1)
+                   get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1) 
                ).type(torch.cuda.FloatTensor)
             )
 
