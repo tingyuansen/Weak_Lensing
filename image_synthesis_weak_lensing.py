@@ -123,8 +123,8 @@ def generate_image():
             model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
 
             # constraint with mean
-            model_mean = model_cull.mean()
-            image_mean = image_initial.mean()
+            # model_mean = model_cull.mean()
+            # image_mean = image_initial.mean()
             loss_mean = (model_mean - image_mean)**2
 
             # calculate scattering coefficients
@@ -133,17 +133,17 @@ def generate_image():
             loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).mean()/10.;
 
             # constaint of different moments
-            model_diff = model_cull - model_mean
-            image_diff = image_initial - image_mean
-            model_diff_std = model_diff/model_cull.std()
-            image_diff_std = image_diff/image_initial.std()
+            # model_diff = model_cull - model_mean
+            # image_diff = image_initial - image_mean
+            # model_diff_std = model_diff/model_cull.std()
+            # image_diff_std = image_diff/image_initial.std()
 
-            loss_L1 = ((model_diff.abs().mean() - image_diff.abs().mean())\
-                                    /image_diff.abs().mean())**2
+            loss_L1 = ((model_cull.abs().mean() - image_initial.abs().mean())\
+                                    /image_initial.abs().mean())**2
             loss_L2 = ( (model_cull.std() - image_initial.std())\
                                     /  (image_initial.std()))**2
-            loss_L3 = (( ((model_diff_std**3).mean()) - ((image_diff_std**3).mean()) )\
-                                    /  (((image_diff_std**3).mean())))**2
+            #loss_L3 = (( ((model_diff_std**3).mean()) - ((image_diff_std**3).mean()) )\
+            #                        /  (((image_diff_std**3).mean())))**2
 
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
             loss = loss_st + loss_mean + loss_L1 + loss_L2 #+ loss_L3
