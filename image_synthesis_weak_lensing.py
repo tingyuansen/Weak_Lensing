@@ -142,8 +142,8 @@ def generate_image():
             loss_L1 = ((model_diff_std.abs().mean() - image_diff_std.abs().mean())\
                                     /(image_diff_std.abs().mean()))**2
             loss_L2 = ( (model_diff.std() - image_diff.std()) / (image_diff.std()) )**2
-            loss_L3 = (( ((model_diff**3).mean()) - ((image_diff**3).mean()) )\
-                                    /  ((image_diff**3).mean()) )**2
+            loss_L3 = ( ((model_diff_std**3).mean()) - ((image_diff_std**3).mean()) )**2
+                                    #/  ((image_diff**3).mean()) )**2
 
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
             loss =  loss_st + loss_mean + loss_L1 + loss_L2 + loss_L3
