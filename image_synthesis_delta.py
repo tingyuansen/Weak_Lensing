@@ -51,17 +51,19 @@ def generate_image():
 
         # optimize
         for i in range(int(num_step)):
-            # loss: L2
 
-            loss_L2 = ((((1./(1.+(-1*model_fit.param).exp()))**2).mean()**0.5 - \
+            model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.4158211 -0.09090403
+
+            # loss: L2
+            loss_L2 = (((model_cull**2).mean()**0.5 - \
                        (image_GPU**2).mean()**0.5) / (image_GPU**2).mean()**0.5 )**2
 
             # loss: L1
-            loss_L1 = ( ((1./(1.+(-1*model_fit.param).exp())).abs().mean() - image_GPU.abs().mean() )\
+            loss_L1 = ( (model_cull.abs().mean() - image_GPU.abs().mean() )\
                         /image_GPU.abs().mean() )**2
             #
             # # loss: mean
-            loss_mean = ((1./(1.+(-1*model_fit.param).exp())).mean() - image_GPU.mean())**2
+            loss_mean = (model_cull.mean() - image_GPU.mean())**2
 
             loss =  loss_L2 + loss_L1 + loss_mean
 
