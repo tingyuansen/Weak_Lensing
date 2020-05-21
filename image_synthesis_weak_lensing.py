@@ -136,13 +136,12 @@ def generate_image():
             # constaint of different moments
             model_diff = model_cull - model_mean
             image_diff = image_initial - image_mean
-            # model_diff_std = model_diff/model_cull.std()
-            # image_diff_std = image_diff/image_initial.std()
+            model_diff_std = model_diff/model_cull.std()
+            image_diff_std = image_diff/image_initial.std()
 
-            loss_L1 = ((model_diff.abs().mean() - image_diff.abs().mean())\
-                                    /(image_diff.abs().mean()))**2
-            loss_L2 = ( (model_diff.std() - image_diff.std())\
-                                    /  (image_diff.std()))**2
+            loss_L1 = ((model_diff_std.abs().mean() - image_diff_std.abs().mean())\
+                                    /(image_diff_std.abs().mean()))**2
+            loss_L2 = ( (model_diff.std() - image_diff.std()) / (image_diff.std()) )**2
             #loss_L3 = (( ((model_diff_std**3).mean()) - ((image_diff_std**3).mean()) )\
             #                        /  (((image_diff_std**3).mean())))**2
 
