@@ -128,9 +128,9 @@ def generate_image():
             loss_mean = (model_mean - image_mean)**2
 
             # calculate scattering coefficients
-            scattering_coeff = scattering(model_cull.reshape(1,num_pixel,num_pixel))\
-                                    .mean(dim=(2,3))[0,:].log();
-            loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum()
+            #scattering_coeff = scattering(model_cull.reshape(1,num_pixel,num_pixel))\
+            #                        .mean(dim=(2,3))[0,:].log();
+            #loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum()
 
             # constaint of different moments
             model_diff = model_cull - model_mean
@@ -151,7 +151,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
                 print(i)
-                print('ST loss', loss_st)
+                #print('ST loss', loss_st)
                 print('Mean loss', loss_mean)
                 print('L1 loss', loss_L1)
                 print('L2 loss', loss_L2)
