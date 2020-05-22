@@ -102,7 +102,7 @@ def generate_image():
 
             # sgaussianized the original field
             image_copy_2 = get_random_data(image[0], num_pixel, num_pixel).ravel()
-            
+
             # scale to have the same cdf
             image_copy = np.copy(image).ravel()
             image_copy = -np.log(1./image_copy - 1)
