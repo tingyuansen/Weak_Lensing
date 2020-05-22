@@ -100,17 +100,20 @@ def generate_image():
         def __init__(self):
             super(model_image, self).__init__()
 
-            # start with the same CDF
+            # start with same gaussianized field
+            image_copy_2 = get_random_data(image[0], num_pixel, num_pixel).ravel()
+
+            # scale to have the same cdf
             image_copy = np.copy(image).ravel()
-            np.random.shuffle(image_copy)
             image_copy = -np.log(1./image_copy - 1)
+            argsort_1 = np.argsort(image_copy_2)
+
+            argsort_2 = np.argsort(image_copy_2)
+            image_copy_2[argsort_2] = image_copy_2[argsort_2] + (image_copy_1[argsort_1]-image_copy_2[argsort_2])
 
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
-               # torch.from_numpy(
-               #     get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1)
-               # ).type(torch.cuda.FloatTensor)
-               torch.from_numpy(image_copy.reshape(1,512,512)).type(torch.cuda.FloatTensor)
+               torch.from_numpy(image_copy_2.reshape(1-1)).type(torch.cuda.FloatTensor)
             )
 
 #---------------------------------------------------------------------------------------------------------
