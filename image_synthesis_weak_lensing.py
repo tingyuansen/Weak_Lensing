@@ -75,12 +75,15 @@ scattering.cuda()
 def generate_image():
 
     # load an initial guess
-    image = np.load("image_initial.npy")[0:1,:,:] + 5.
-    flux_min = -0.02934368796646595 + 5.
-    flux_max = 0.08139952920377262 + 5.
+    image = np.load("image_initial.npy")[0:1,:,:]
+    flux_min = -0.02934368796646595
+    flux_max = 0.08139952920377262
     flux_range = flux_max - flux_min
     image[image < flux_min] = flux_min
     image[image > flux_max] = flux_max
+    image = (image - flux_min)/flux_range
+    image[image == 0.] = 1e-3
+    image[image == 1.] = 1. - 1e-3
     #CDF_t = torch.from_numpy(np.sort(image.flatten())).type(torch.cuda.FloatTensor) + 5.
 
 #----------------------------------------------------------------------------------------------------------
@@ -100,7 +103,7 @@ def generate_image():
             # start with the same CDF
             image_copy = np.copy(image).ravel()
             np.random.shuffle(image_copy)
-            image_copy = -np.log(flux_range/(image_copy - flux_min) - 1)
+            image_copy = -np.log(1./image_copy - 1)
 
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
@@ -129,7 +132,7 @@ def generate_image():
         for i in range(int(num_step)):
 
             # set mean max
-            model_cull = (1./(1.+(-1*model_fit.param).exp()))*flux_range + flux_min
+            model_cull = (1./(1.+(-1*model_fit.param).exp()))
             #model_cull = model_fit.param
 
             # constraint with mean
