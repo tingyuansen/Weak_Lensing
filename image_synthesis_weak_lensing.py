@@ -118,7 +118,7 @@ def generate_image():
 
     #target_coeff = scattering_target(image_initial).mean(dim=(2,3))[0,:].log();
 
-    target_coeff, = get_power_spectrum(image_initial[0])
+    target_coeff, = get_power_spectrum(image_initial[0],10)
 
 #----------------------------------------------------------------------------------------------------------
     # define mock image
@@ -175,7 +175,7 @@ def generate_image():
             #loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum()
 
             # calculate power_spectrum
-            scattering_coeff, = get_power_spectrum(model_cull.reshape(num_pixel,num_pixel))
+            scattering_coeff, = get_power_spectrum(model_cull.reshape(num_pixel,num_pixel),10)
             loss_st = ((target_coeff-scattering_coeff)**2).sum()
 
             # constaint of different moments
