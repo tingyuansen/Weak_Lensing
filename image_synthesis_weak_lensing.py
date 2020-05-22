@@ -96,14 +96,14 @@ def generate_image():
 
             # start with the same CDF
             image_copy = np.copy(image).ravel()
-            image_copy = np.random.shuffle(image_copy).reshape(1,512,512)
-            
+            np.random.shuffle(image_copy)
+
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
                # torch.from_numpy(
                #     get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1)
                # ).type(torch.cuda.FloatTensor)
-               torch.from_numpy(image_copy).type(torch.cuda.FloatTensor)
+               torch.from_numpy(image_copy.reshape(1,512,512)).type(torch.cuda.FloatTensor)
             )
 
 #---------------------------------------------------------------------------------------------------------
