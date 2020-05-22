@@ -145,7 +145,7 @@ def generate_image():
 #---------------------------------------------------------------------------------------------------------
     # learn with different training rate
     model_fit = model_image()
-    learnable_param_list = [[100*50, 1e0], [100*0, 1e-3], [100*0, 1e-4]]
+    learnable_param_list = [[100*5, 1e0], [100*0, 1e-3], [100*0, 1e-4]]
 
     # loop over training rate
     for learnable_group in range(len(learnable_param_list)):
@@ -178,9 +178,9 @@ def generate_image():
             scattering_coeff, dummy = get_power_spectrum(model_cull.reshape(num_pixel,num_pixel),10)
             loss_st = ((target_coeff.log()-scattering_coeff.log())**2).sum()
 
-            #print(target_coeff)
-            #print(scattering_coeff)
-            #print(' ')
+            print(target_coeff)
+            print(scattering_coeff)
+            print(' ')
 
             # constaint of different moments
             model_diff = model_cull - model_mean
