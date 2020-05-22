@@ -181,6 +181,8 @@ def generate_image():
             print(target_coeff)
             print(scattering_coeff)
             print(' ')
+            if np.sum(np.isnan(scattering_coeff)) > 0:
+                break
 
             # constaint of different moments
             model_diff = model_cull - model_mean
