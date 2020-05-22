@@ -97,7 +97,8 @@ def generate_image():
             # start with the same CDF
             image_copy = np.copy(image).ravel()
             np.random.shuffle(image_copy)
-
+            image_copy = -np.log(0.11074321717023858/(image_copy + 0.02934368796646595) - 1)
+            
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
                # torch.from_numpy(
@@ -125,8 +126,8 @@ def generate_image():
         for i in range(int(num_step)):
 
             # set mean max
-            #model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
-            model_cull = model_fit.param
+            model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
+            #model_cull = model_fit.param
 
             # constraint with mean
             model_mean = model_cull.mean()
