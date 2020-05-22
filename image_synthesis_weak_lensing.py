@@ -211,7 +211,7 @@ def generate_image():
             loss.backward();
             optimizer.step();
 
-        np.save("../max_order=2.npy", model_cull.cpu().detach().numpy());
+        #np.save("../max_order=2.npy", model_cull.cpu().detach().numpy());
 
 #---------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
