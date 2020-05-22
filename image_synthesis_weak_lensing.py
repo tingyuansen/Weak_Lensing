@@ -63,8 +63,8 @@ num_pixel = 512
 
 # define scattering
 J_choice = 5
-L_choice = 1
-max_order_choice = 1
+L_choice = 4
+max_order_choice = 2
 scattering = Scattering2D(J=J_choice, shape=(num_pixel,num_pixel),\
                           L=L_choice, max_order=max_order_choice)
 scattering.cuda()
@@ -84,7 +84,6 @@ def generate_image():
     image = (image - flux_min)/flux_range
     image[image == 0.] = 1e-3
     image[image == 1.] = 1. - 1e-3
-    #CDF_t = torch.from_numpy(np.sort(image.flatten())).type(torch.cuda.FloatTensor) + 5.
 
 #----------------------------------------------------------------------------------------------------------
     # target ccoefficients
@@ -158,9 +157,8 @@ def generate_image():
                                     /(image_diff_std.abs().mean()))**2
             loss_L2 = ( (model_diff.std() - image_diff.std()) / (image_diff.std()) )**2
             loss_L3 = ( ((model_diff_std**3).mean()) - ((image_diff_std**3).mean()) )**2
-                                    #/  ((image_diff**3).mean()) )**2
 
-            #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
+            # total loss
             loss =  loss_st + loss_mean + loss_L1 + loss_L2 + loss_L3
 
 #---------------------------------------------------------------------------------------------------------
@@ -171,9 +169,9 @@ def generate_image():
                 print('L1 loss', loss_L1)
                 print('L2 loss', loss_L2)
                 print('L3 loss', loss_L3)
-                print(((model_diff_std**3).mean()), ((image_diff_std**3).mean()))
+                #print(((model_diff_std**3).mean()), ((image_diff_std**3).mean()))
                 print(' ')
-                np.save("../max_order=2_temp.npy", model_cull.cpu().detach().numpy());
+                np.save("../max_order=2.npy", model_cull.cpu().detach().numpy());
 
             optimizer.zero_grad();
             loss.backward();
