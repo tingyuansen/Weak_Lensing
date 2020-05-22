@@ -105,7 +105,7 @@ def generate_image():
 
             # scale to have the same cdf
             image_copy = np.copy(image).ravel()
-            image_copy = -np.log(1./image_copy - 1)
+            #image_copy = -np.log(1./image_copy - 1)
             argsort_1 = np.argsort(image_copy)
 
             argsort_2 = np.argsort(image_copy_2)
@@ -135,8 +135,8 @@ def generate_image():
         for i in range(int(num_step)):
 
             # set mean max
-            model_cull = (1./(1.+(-1*model_fit.param).exp()))
-            #model_cull = model_fit.param
+            #model_cull = (1./(1.+(-1*model_fit.param).exp()))
+            model_cull = model_fit.param
 
             # constraint with mean
             model_mean = model_cull.mean()
@@ -161,7 +161,7 @@ def generate_image():
                                     #/  ((image_diff**3).mean()) )**2
 
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
-            loss =  loss_st + loss_mean + loss_L1 + loss_L2 #+ loss_L3
+            loss =  loss_st + loss_mean + loss_L1 + loss_L2 + loss_L3
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
