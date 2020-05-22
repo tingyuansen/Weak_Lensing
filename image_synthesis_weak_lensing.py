@@ -176,11 +176,11 @@ def generate_image():
 
             # calculate power_spectrum
             scattering_coeff, dummy = get_power_spectrum(model_cull.reshape(num_pixel,num_pixel),10)
-            loss_st = ((target_coeff-scattering_coeff)**2).sum()
+            loss_st = ((target_coeff.log()-scattering_coeff.log())**2).sum()
 
-            print(target_coeff)
-            print(scattering_coeff)
-            print(' ')
+            #print(target_coeff)
+            #print(scattering_coeff)
+            #print(' ')
 
             # constaint of different moments
             model_diff = model_cull - model_mean
