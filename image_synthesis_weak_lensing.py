@@ -100,9 +100,9 @@ def generate_image():
         def __init__(self):
             super(model_image, self).__init__()
 
-            # start with same gaussianized field
+            # sgaussianized the original field
             image_copy_2 = get_random_data(image[0], num_pixel, num_pixel).ravel()
-
+            
             # scale to have the same cdf
             image_copy = np.copy(image).ravel()
             image_copy = -np.log(1./image_copy - 1)
