@@ -178,7 +178,7 @@ def generate_image():
             scattering_coeff, dummy = get_power_spectrum(model_cull.reshape(num_pixel,num_pixel),10)
             loss_st = ((target_coeff.log()-scattering_coeff.log())**2).sum()
 
-            if np.sum(np.isnan(scattering_coeff)) > 0:
+            if np.sum(np.isnan(scattering_coeff.cpu().detach().numpy())) > 0:
                 break
 
             # constaint of different moments
