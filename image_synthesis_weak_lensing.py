@@ -13,6 +13,30 @@ import numpy as np
 
 
 #=========================================================================================================
+def get_power_spectrum(target, bins):
+    '''
+    get the power spectrum of a given image
+    '''
+    M, N = target.shape
+    modulus = torch.fft(torch.cat((target.reshape(M,N,1), torch.zeros((M,N,1)).type(torch.cuda.FloatTensor) ), 2), 2)
+    modulus = (modulus[:,:,0]**2 + modulus[:,:,1]**2)**0.5
+    modulus = torch.cat(
+        ( torch.cat(( modulus[M//2:, M//2:], modulus[M//2:, :M//2] ), 0),
+          torch.cat(( modulus[:M//2, M//2:], modulus[:M//2, :M//2] ), 0)
+        ),1)
+    X = np.arange(0,M)
+    Y = np.arange(0,N)
+    Xgrid, Ygrid = np.meshgrid(X,Y)
+    R = ((Xgrid-M/2)**2+(Ygrid-N/2)**2)**0.5
+    R = torch.from_numpy(R).type(torch.cuda.FloatTensor)
+    R_range = torch.logspace(0.0, np.log10(M/2), bins).type(torch.cuda.FloatTensor)
+    R_range = torch.cat((torch.tensor([0]).type(torch.cuda.FloatTensor), R_range))
+    power_spectrum = torch.zeros(len(R_range)-1).type(torch.cuda.FloatTensor)
+    for i in range(len(R_range)-1):
+        select = (R >= R_range[i]) * (R<R_range[i+1])
+        power_spectrum[i] = modulus[select].mean()
+    return power_spectrum, R_range
+
 def get_random_data(target, M, N, mode='image'):
     '''
     get a gaussian random field with the same power spectrum as the image 'target' (in the 'image' mode),
@@ -88,10 +112,13 @@ def generate_image():
 #----------------------------------------------------------------------------------------------------------
     # target ccoefficients
     image_initial = torch.from_numpy(image).type(torch.cuda.FloatTensor)
-    scattering_target = Scattering2D(J=J_choice, shape=(512,512),\
-                                  L=L_choice, max_order=max_order_choice)
-    scattering_target.cuda()
-    target_coeff = scattering_target(image_initial).mean(dim=(2,3))[0,:].log();
+    #scattering_target = Scattering2D(J=J_choice, shape=(512,512),\
+    #                              L=L_choice, max_order=max_order_choice)
+    #scattering_target.cuda()
+
+    #target_coeff = scattering_target(image_initial).mean(dim=(2,3))[0,:].log();
+
+    target_coeff, = get_power_spectrum(image_initial[0])
 
 #----------------------------------------------------------------------------------------------------------
     # define mock image
@@ -143,9 +170,13 @@ def generate_image():
             loss_mean = (model_mean - image_mean)**2
 
             # calculate scattering coefficients
-            scattering_coeff = scattering(model_cull.reshape(1,num_pixel,num_pixel))\
-                                   .mean(dim=(2,3))[0,:].log();
-            loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum()
+            #scattering_coeff = scattering(model_cull.reshape(1,num_pixel,num_pixel))\
+            #                       .mean(dim=(2,3))[0,:].log();
+            #loss_st = ((target_coeff[1:]-scattering_coeff[1:])**2).sum()
+
+            # calculate power_spectrum
+            scattering_coeff, = get_power_spectrum(model_cull.reshape(num_pixel,num_pixel))
+            loss_st = ((target_coeff-scattering_coeff)**2).sum()
 
             # constaint of different moments
             model_diff = model_cull - model_mean
