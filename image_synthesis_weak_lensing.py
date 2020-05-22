@@ -98,7 +98,7 @@ def generate_image():
             image_copy = np.copy(image).ravel()
             np.random.shuffle(image_copy)
             image_copy = -np.log(0.11074321717023858/(image_copy + 0.02934368796646595) - 1)
-            
+
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
                # torch.from_numpy(
@@ -152,7 +152,7 @@ def generate_image():
                                     #/  ((image_diff**3).mean()) )**2
 
             #loss_cdf = ((torch.sort(model_fit.param).values[0,:] - CDF_t)**2).sum()/5.
-            loss =  loss_st + loss_mean + loss_L1 + loss_L2 + loss_L3
+            loss =  loss_st + loss_mean + loss_L1 + loss_L2 #+ loss_L3
 
 #---------------------------------------------------------------------------------------------------------
             if i%50== 0:
