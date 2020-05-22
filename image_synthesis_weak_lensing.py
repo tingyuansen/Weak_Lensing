@@ -94,14 +94,16 @@ def generate_image():
         def __init__(self):
             super(model_image, self).__init__()
 
+            # start with the same CDF
+            image_copy = np.copy(image).ravel()
+            image_copy = np.random.shuffle(image_copy).reshape(1,512,512)
+            
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
                # torch.from_numpy(
                #     get_random_data(image[0], num_pixel, num_pixel).reshape(1,-1)
                # ).type(torch.cuda.FloatTensor)
-               torch.from_numpy(
-                    np.random.uniform(size=(1,512,512))*10.-5.
-                ).type(torch.cuda.FloatTensor)
+               torch.from_numpy(image_copy).type(torch.cuda.FloatTensor)
             )
 
 #---------------------------------------------------------------------------------------------------------
@@ -123,8 +125,8 @@ def generate_image():
         for i in range(int(num_step)):
 
             # set mean max
-            model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
-            #model_cull = model_fit.param
+            #model_cull = (1./(1.+(-1*model_fit.param).exp()))*0.11074321717023858 -0.02934368796646595
+            model_cull = model_fit.param
 
             # constraint with mean
             model_mean = model_cull.mean()
