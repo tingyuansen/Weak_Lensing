@@ -109,7 +109,7 @@ def generate_image():
             argsort_1 = np.argsort(image_copy_2)
 
             argsort_2 = np.argsort(image_copy_2)
-            image_copy_2[argsort_2] = image_copy_2[argsort_2] + (image_copy_1[argsort_1]-image_copy_2[argsort_2])
+            image_copy_2[argsort_2] = image_copy_1[argsort_1]
 
             # star with the same image but with random phase
             self.param = torch.nn.Parameter(
