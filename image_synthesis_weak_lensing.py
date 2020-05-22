@@ -63,8 +63,8 @@ num_pixel = 512
 
 # define scattering
 J_choice = 5
-L_choice = 4
-max_order_choice = 2
+L_choice = 1
+max_order_choice = 1
 scattering = Scattering2D(J=J_choice, shape=(num_pixel,num_pixel),\
                           L=L_choice, max_order=max_order_choice)
 scattering.cuda()
