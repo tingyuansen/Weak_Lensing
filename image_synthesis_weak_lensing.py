@@ -106,7 +106,7 @@ def generate_image():
             # scale to have the same cdf
             image_copy = np.copy(image).ravel()
             image_copy = -np.log(1./image_copy - 1)
-            argsort_1 = np.argsort(image_copy_2)
+            argsort_1 = np.argsort(image_copy)
 
             argsort_2 = np.argsort(image_copy_2)
             image_copy_2[argsort_2] = image_copy[argsort_1]
